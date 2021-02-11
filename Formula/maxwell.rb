@@ -26,9 +26,13 @@ class Maxwell < Formula
 
   test do
     fork do
-      exec "#{bin}/maxwell --help > #{testpath}/maxwell.log 2>/dev/null"
+      # Tell Maxwell to connect to a bogus host name so we don't actually connect to a local instance
+      # The '.invalid' TLD is reserved as never to be installed as a valid TLD.
+      exec "#{bin}/maxwell --host not.real.invalid > #{testpath}/maxwell.log 2>&1"
     end
     sleep 15
-    assert_match "Help for Maxwell:", IO.read("#{testpath}/maxwell.log")
+
+    # Validate that we actually got in to Maxwell far enough to attempt to connect.
+    assert_match "ERROR Maxwell - SQLException: Communications link failure", IO.read("#{testpath}/maxwell.log")
   end
 end
