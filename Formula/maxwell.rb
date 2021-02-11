@@ -26,9 +26,9 @@ class Maxwell < Formula
 
   test do
     fork do
-      exec "#{bin}/maxwell --log_level=OFF > #{testpath}/maxwell.log 2>/dev/null"
+      exec "#{bin}/maxwell --help > #{testpath}/maxwell.log 2>/dev/null"
     end
     sleep 15
-    assert_match "Using kafka version", IO.read("#{testpath}/maxwell.log")
+    assert_match "Help for Maxwell:", IO.read("#{testpath}/maxwell.log")
   end
 end
